@@ -14,8 +14,7 @@ public class CitizenRegistry {
     private Set<Citizen> citizens;
 
     public CitizenRegistry() {
-
-        this.citizens = loadCitizenRegistry();
+        this.citizens = loadCitizenRegistry(); //try to load from file
 
         if (this.citizens == null) {
             this.citizens = new HashSet<>();
@@ -59,16 +58,19 @@ public class CitizenRegistry {
         return isUpdated;
     }
 
-    public void searchAndPrintCitizens(Citizen citizen, Map<String, Boolean> searchFields) {
+    public void searchAndPrintCitizens(
+            Citizen citizen,
+            Map<String, Boolean> searchFields) {
+
         Set<Citizen> foundCitizens = citizens
                 .stream()
-                .filter(c -> searchFields.get("id") ? c.getId().equals(citizen.getId()) : true)
-                .filter(c -> searchFields.get("firstName") ? c.getFirstName().equals(citizen.getFirstName()) : true)
-                .filter(c -> searchFields.get("lastName") ? c.getLastName().equals(citizen.getLastName()) : true)
-                .filter(c -> searchFields.get("gender") ? c.getGender().equals(citizen.getGender()) : true)
-                .filter(c -> searchFields.get("dob") ? c.getDob().equals(citizen.getDob()) : true)
-                .filter(c -> searchFields.get("afm") ? c.getAfm().equals(citizen.getAfm()) : true)
-                .filter(c -> searchFields.get("address") ? c.getAddress().equals(citizen.getAddress()) : true)
+                .filter(c -> searchFields.get("IncludeId")? c.getId().equals(citizen.getId()) : true)
+                .filter(c -> searchFields.get("IncludeFirstName")? c.getFirstName().equals(citizen.getFirstName()) : true)
+                .filter(c -> searchFields.get("IncludeLastName")? c.getLastName().equals(citizen.getLastName()) : true)
+                .filter(c -> searchFields.get("IncludeGender")? c.getGender().equals(citizen.getGender()) : true)
+                .filter(c -> searchFields.get("IncludeDob")? c.getDob().equals(citizen.getDob()) : true)
+                .filter(c -> searchFields.get("IncludeAfm")? c.getAfm().equals(citizen.getAfm()) : true)
+                .filter(c -> searchFields.get("IncludeAddress")? c.getAddress().equals(citizen.getAddress()) : true)
                 .collect(Collectors.toSet());
 
         if (foundCitizens.isEmpty()) {
@@ -100,7 +102,8 @@ public class CitizenRegistry {
             out.close();
             fileOut.close();
         } catch (IOException i) {
-            i.printStackTrace();
+            System.out.println("Could not save Registry data file");
+//            i.printStackTrace();
         }
     }
 
@@ -122,7 +125,6 @@ public class CitizenRegistry {
         }
 
         return citizens;
-
     }
 
 }
